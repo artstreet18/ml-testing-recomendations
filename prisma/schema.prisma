@@ -1,0 +1,25 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["jsonProtocol"]
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL")
+  directUrl         = env("POSTGRES_URL_NON_POOLING")
+  shadowDatabaseUrl = env("POSTGRES_SHADOW_DATABASE_URL")
+}
+
+model node {
+  id              Int               @id @default(autoincrement())
+  name            String
+  recommendations recommendations[]
+}
+
+model recommendations {
+  id                      Int    @id @default(autoincrement())
+  recommendation_text     String
+  node_id                 Int?
+  recommendation_priority Int
+  node                    node?  @relation(fields: [node_id], references: [id])
+}
